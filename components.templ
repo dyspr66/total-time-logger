@@ -1,0 +1,30 @@
+package main
+
+templ Home() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Total Time Logger</title>
+			<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+		</head>
+		<body>
+			<h1>Total Time Logger</h1>
+			<button hx-get="/addActivity" hx-target="#display">Add activity</button>
+			<button>View activities</button>
+			<div id="display"></div>
+		</body>
+	</html>
+}
+
+templ AddActivity() {
+	<form hx-post="/addActivity" hx-target="#display">
+		<label for="name">Name:</label>
+		<input name="name" type="text"/>
+		<br/>
+		<label for="description">Describe your activity:</label>
+		<input name="description" type="text"/>
+		<button type="submit">Submit</button>
+	</form>
+}
