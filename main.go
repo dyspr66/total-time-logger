@@ -13,7 +13,7 @@ type totalTimeLogger struct {
 type activity struct {
 	name        string
 	description string
-	totalTime   time.Time
+	totalTime   time.Time // TODO - should be a duration
 	sessions    []session
 }
 
