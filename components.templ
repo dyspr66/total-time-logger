@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 templ Home() {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -10,9 +12,9 @@ templ Home() {
 			<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
 		</head>
 		<body>
-			<h1>Total Time Logger</h1>
+			<h1><a href="/">Total Time Logger</a></h1>
 			<button hx-get="/addActivity" hx-target="#display">Add activity</button>
-			<button>View activities</button>
+			<button hx-get="/viewActivities" hx-target="#display">View activities</button>
 			<div id="display"></div>
 		</body>
 	</html>
@@ -25,6 +27,26 @@ templ AddActivity() {
 		<br/>
 		<label for="description">Describe your activity:</label>
 		<input name="description" type="text"/>
+		<br/>
 		<button type="submit">Submit</button>
 	</form>
+}
+
+templ ViewActivities(as activities) {
+	<div>
+		for k, v := range as {
+			<h3>{ v.name }</h3>
+			<p>{ v.description }</p>
+			<button hx-get={ fmt.Sprintf("/selectActivity?id=%d", k) } hx-target="#display">Select this Activity</button>
+			<hr/>
+		}
+	</div>
+}
+
+templ SelectActivity(a activity) {
+	<div>
+		<h3>{ a.name }</h3>
+		<p>{ a.description }</p>
+		<button>Start Timer</button>
+	</div>
 }

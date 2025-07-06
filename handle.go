@@ -15,7 +15,7 @@ func handleAddActivity(w http.ResponseWriter, r *http.Request) {
 	newActivity.name = name
 	newActivity.description = description
 
-	ttl.activities = append(ttl.activities, newActivity)
+	ttl.activities[len(ttl.activities)+1] = newActivity
 
 	// TODO - update data storage
 	fmt.Fprint(w, "Success!")
