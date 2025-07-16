@@ -3,7 +3,6 @@ package main
 import (
 	"log/slog"
 	"net/http"
-	"strconv"
 )
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
@@ -32,16 +31,13 @@ func serveviewActivities(w http.ResponseWriter, r *http.Request) {
 }
 
 func serveSelectActivity(w http.ResponseWriter, r *http.Request) {
-	actID := r.URL.Query().Get("id")
-	id, err := strconv.Atoi(actID)
+	act, id, err := getActivityFromStringID(r.URL.Query().Get("id"))
 	if err != nil {
-		slog.Error("Converting id from url", "err", err)
+		slog.Error("Getting activity and id from url", "err", err)
 		return
 	}
 
-	act := ttl.activities[id]
-
-	err = SelectActivity(act).Render(r.Context(), w)
+	err = SelectActivity(*act, id).Render(r.Context(), w)
 	if err != nil {
 		slog.Error("Rendering select activity component", "err", err)
 		return
