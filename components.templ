@@ -20,6 +20,11 @@ templ Home() {
 			<button hx-get="/viewActivities" hx-target="#display">View activities</button>
 			<div id="display"></div>
 		</body>
+		<script>
+			document.body.addEventListener("show", function(e){
+				alert(e.detail.value);
+			})
+		</script>
 	</html>
 }
 
@@ -50,7 +55,7 @@ templ SelectActivity(a activity, activityID int, totalTime time.Duration, msg st
 	<div>
 		<h3>{ a.Name }</h3>
 		<p>{ a.Description }</p>
-		<h5>Total Time Spent:</h5>
+		<h5>Total Time Spent</h5>
 		<p>In seconds: { totalTime.Seconds() }</p>
 		<p>In minutes: { totalTime.Minutes() }</p>
 		<p>In hours: { totalTime.Hours() }</p>

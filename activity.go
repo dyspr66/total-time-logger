@@ -11,9 +11,13 @@ type activity struct {
 }
 
 func (a *activity) getTotalTimeSpent() time.Duration {
+	var defaultTime time.Time
+
 	var totalDuration time.Duration
 	for _, session := range a.Sessions {
-		totalDuration += session.EndTime.Sub(session.StartTime)
+		if session.EndTime != defaultTime {
+			totalDuration += session.EndTime.Sub(session.StartTime)
+		}
 	}
 	return totalDuration
 }
