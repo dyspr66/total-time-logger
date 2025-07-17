@@ -46,7 +46,7 @@ templ ViewActivities(as activities) {
 	</div>
 }
 
-templ SelectActivity(a activity, activityID int, totalTime time.Duration) {
+templ SelectActivity(a activity, activityID int, totalTime time.Duration, msg string) {
 	<div>
 		<h3>{ a.Name }</h3>
 		<p>{ a.Description }</p>
@@ -54,8 +54,8 @@ templ SelectActivity(a activity, activityID int, totalTime time.Duration) {
 		<p>In seconds: { totalTime.Seconds() }</p>
 		<p>In minutes: { totalTime.Minutes() }</p>
 		<p>In hours: { totalTime.Hours() }</p>
-		<button hx-post={ fmt.Sprintf("/start?id=%d", activityID) } hx-target="#timerDisplay">Start Timer</button>
-		<button hx-post={ fmt.Sprintf("/end?id=%d", activityID) } hx-target="#timerDisplay">End Timer</button>
-		<div id="timerDisplay"></div>
+		<button hx-post={ fmt.Sprintf("/start?id=%d", activityID) } hx-target="#display">Start Timer</button>
+		<button hx-post={ fmt.Sprintf("/end?id=%d", activityID) } hx-target="#display">End Timer</button>
+		<p>{ msg }</p>
 	</div>
 }

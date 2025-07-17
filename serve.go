@@ -37,7 +37,7 @@ func serveSelectActivity(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = SelectActivity(*act, id, act.getTotalTimeSpent()).Render(r.Context(), w)
+	err = SelectActivity(*act, id, act.getTotalTimeSpent(), "").Render(r.Context(), w)
 	if err != nil {
 		slog.Error("Rendering select activity component", "err", err)
 		return
