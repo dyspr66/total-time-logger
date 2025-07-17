@@ -8,21 +8,18 @@ import (
 )
 
 func handleAddActivity(w http.ResponseWriter, r *http.Request) {
-	var newActivity activity
-
 	// TODO - validate
-	name := r.FormValue("name")
-	description := r.FormValue("description")
-
-	newActivity.name = name
-	newActivity.description = description
-
-	ttl.activities[len(ttl.activities)+1] = &newActivity
+	n := r.FormValue("name")
+	d := r.FormValue("description")
+	ttl.activities = append(ttl.activities, &activity{Name: n, Description: d})
 
 	// TODO - update data storage
+	ttl.saveToJson()
+
 	fmt.Fprint(w, "Success!")
 }
 
+// TODO - handle pressing start twice.
 func handleStart(w http.ResponseWriter, r *http.Request) {
 	act, _, err := getActivityFromStringID(r.URL.Query().Get("id"))
 	if err != nil {
@@ -30,10 +27,13 @@ func handleStart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	act.sessions = append(act.sessions, session{startTime: time.Now()})
-	fmt.Println("timer start!")
+	slog.Info("Timer started.")
+
+	act.Sessions = append(act.Sessions, Sessions{StartTime: time.Now()})
+	ttl.saveToJson()
 }
 
+// TODO - handle pressing end twice.
 func handleEnd(w http.ResponseWriter, r *http.Request) {
 	act, _, err := getActivityFromStringID(r.URL.Query().Get("id"))
 	if err != nil {
@@ -41,6 +41,8 @@ func handleEnd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	act.sessions[len(act.sessions)-1].endTime = time.Now()
-	fmt.Println("timer end!")
+	slog.Info("Timer ended.")
+
+	act.Sessions[len(act.Sessions)-1].EndTime = time.Now()
+	ttl.saveToJson()
 }

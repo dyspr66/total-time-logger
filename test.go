@@ -1,10 +1,10 @@
 package main
 
 func test() {
-	acts := make(map[int]*activity)
-	acts[1] = &activity{name: "name1", description: "desc1"}
-	acts[2] = &activity{name: "name2", description: "desc2"}
-	acts[3] = &activity{name: "name3", description: "desc3"}
+	acts := activities{}
+	acts = append(acts, &activity{Name: "name1", Description: "desc1"})
+	acts = append(acts, &activity{Name: "name2", Description: "desc2"})
+	acts = append(acts, &activity{Name: "name3", Description: "desc3"})
 	testTtl := totalTimeLogger{
 		activities: acts,
 	}

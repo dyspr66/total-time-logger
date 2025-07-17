@@ -5,39 +5,22 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 type totalTimeLogger struct {
-	activities map[int]*activity // map
+	activities []*activity
 }
-
-type activities map[int]*activity
-
-type activity struct {
-	name        string
-	description string
-	timer       time.Ticker
-	totalTime   time.Duration
-	sessions    []session
-}
-
-func (a *activity) viewSessions()   {}
-func (a *activity) startActivity()  {}
-func (a *activity) stopActivity()   {}
-func (a *activity) deleteActivity() {}
-
-type session struct {
-	startTime time.Time
-	endTime   time.Time
-}
-
-func (a *session) editStartTime() {}
-func (a *session) editEndTime()   {}
 
 var ttl totalTimeLogger
 
 func main() {
+	// test()
+	err := ttl.readFromJson()
+	if err != nil {
+		slog.Error("Reading", "err", err)
+		return
+	}
+
 	router := http.NewServeMux()
 
 	router.HandleFunc("/", serveHome)
@@ -51,7 +34,7 @@ func main() {
 	router.HandleFunc("POST /end", handleEnd)
 
 	slog.Info("Starting server")
-	err := http.ListenAndServe(":8888", router)
+	err = http.ListenAndServe(":8888", router)
 	if err != nil {
 		slog.Error("Listening:", "err", err)
 		return

@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 templ Home() {
 	<!DOCTYPE html>
@@ -35,18 +38,22 @@ templ AddActivity() {
 templ ViewActivities(as activities) {
 	<div>
 		for k, v := range as {
-			<h3>{ v.name }</h3>
-			<p>{ v.description }</p>
+			<h3>{ v.Name }</h3>
+			<p>{ v.Description }</p>
 			<button hx-get={ fmt.Sprintf("/selectActivity?id=%d", k) } hx-target="#display">Select this Activity</button>
 			<hr/>
 		}
 	</div>
 }
 
-templ SelectActivity(a activity, activityID int) {
+templ SelectActivity(a activity, activityID int, totalTime time.Duration) {
 	<div>
-		<h3>{ a.name }</h3>
-		<p>{ a.description }</p>
+		<h3>{ a.Name }</h3>
+		<p>{ a.Description }</p>
+		<h5>Total Time Spent:</h5>
+		<p>In seconds: { totalTime.Seconds() }</p>
+		<p>In minutes: { totalTime.Minutes() }</p>
+		<p>In hours: { totalTime.Hours() }</p>
 		<button hx-post={ fmt.Sprintf("/start?id=%d", activityID) } hx-target="#timerDisplay">Start Timer</button>
 		<button hx-post={ fmt.Sprintf("/end?id=%d", activityID) } hx-target="#timerDisplay">End Timer</button>
 		<div id="timerDisplay"></div>
