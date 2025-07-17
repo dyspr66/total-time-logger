@@ -1,12 +1,14 @@
-package main
+package logger
 
 import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"ttl/data"
 )
 
-func (t *totalTimeLogger) readFromJson() error {
+func (t *TotalTimeLogger) ReadFromJson(ttl *TotalTimeLogger) error {
+	// Read file
 	b, err := os.ReadFile("record.json")
 	if err != nil {
 		return fmt.Errorf("reading file: %w", err)
@@ -16,35 +18,36 @@ func (t *totalTimeLogger) readFromJson() error {
 		return nil
 	}
 
-	var acts []activity
+	// Use file data in program
+	var acts []data.Activity
 	err = json.Unmarshal(b, &acts)
 	if err != nil {
 		return fmt.Errorf("unmarshaling from json: %w", err)
 	}
 
-	var a activities
+	var a data.Activities
 	for _, v := range acts {
 		a = append(a, &v)
 	}
 
-	ttl.activities = a
+	ttl.Activities = a
 
 	return nil
 }
 
-func (t *totalTimeLogger) saveToJson() error {
-	var acts []activity
-	for _, v := range t.activities {
+func (t *TotalTimeLogger) SaveToJSON() error {
+	// Structute the program data
+	var acts []data.Activity
+	for _, v := range t.Activities {
 		acts = append(acts, *v)
 	}
 
-	// Marshal
+	// Write program data into file
 	jsonData, err := json.Marshal(acts)
 	if err != nil {
 		return fmt.Errorf("marshaling to json: %w", err)
 	}
 
-	// Save
 	err = os.WriteFile("record.json", jsonData, 0644)
 	if err != nil {
 		return fmt.Errorf("writing data to json file: %w", err)

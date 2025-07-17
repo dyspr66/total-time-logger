@@ -5,17 +5,14 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"ttl/data"
+	"ttl/logger"
 )
 
-type totalTimeLogger struct {
-	activities []*activity
-}
-
-var ttl totalTimeLogger
+var ttl logger.TotalTimeLogger
 
 func main() {
-	// test()
-	err := ttl.readFromJson()
+	err := ttl.ReadFromJson(&ttl)
 	if err != nil {
 		slog.Error("Reading", "err", err)
 		return
@@ -34,19 +31,20 @@ func main() {
 	router.HandleFunc("POST /end", handleEnd)
 
 	slog.Info("Starting server")
-	err = http.ListenAndServe(":8888", router)
+	err = http.ListenAndServe(":8080", router)
 	if err != nil {
 		slog.Error("Listening:", "err", err)
 		return
 	}
 }
 
-func getActivityFromStringID(actID string) (act *activity, id int, err error) {
+// TODO - place this somewhere reasonable
+func getActivityFromStringID(actID string) (act *data.Activity, id int, err error) {
 	id, err = strconv.Atoi(actID)
 	if err != nil {
 		return act, id, fmt.Errorf("converting id from str to int: %w", err)
 	}
 
-	activity := ttl.activities[id]
+	activity := ttl.Activities[id]
 	return activity, id, nil
 }

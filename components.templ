@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
+	"ttl/data"
 )
 
 templ Home() {
@@ -21,6 +22,7 @@ templ Home() {
 			<div id="display"></div>
 		</body>
 		<script>
+			 /* NOTE - This lets us send alerts using HX-Trigger headers */
 			document.body.addEventListener("show", function(e){
 				alert(e.detail.value);
 			})
@@ -40,7 +42,7 @@ templ AddActivity() {
 	</form>
 }
 
-templ ViewActivities(as activities) {
+templ ViewActivities(as data.Activities) {
 	<div>
 		for k, v := range as {
 			<h3>{ v.Name }</h3>
@@ -51,7 +53,7 @@ templ ViewActivities(as activities) {
 	</div>
 }
 
-templ SelectActivity(a activity, activityID int, totalTime time.Duration, msg string) {
+templ SelectActivity(a data.Activity, activityID int, totalTime time.Duration, msg string) {
 	<div>
 		<h3>{ a.Name }</h3>
 		<p>{ a.Description }</p>
